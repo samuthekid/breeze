@@ -1,5 +1,284 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+
+@font-face {
+  font-family: SegoeUILight;
+  src: url('fonts/segoeuil.ttf');
+  src: url('fonts/segoeuil.woff');
+}
+
+@font-face {
+  font-family: SegoeUI;
+  src: url('fonts/segoeui.ttf');
+  src: url('fonts/segoeui.woff');
+}
+
+@font-face {
+  font-family: SegoeUIBold;
+  src: url('fonts/segoeuib.ttf');
+  src: url('fonts/segoeuib.woff');
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-button {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFF;
+}
+
+body{
+  font-family: SegoeUILight;
+  font-size: 1.6vh;
+  font-weight: 100;
+  color: #FFF;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  text-shadow: 0px 0px 18px #222;
+}
+
+input:focus{
+  outline: 0;
+}
+
+.wallpaper {
+  background: url('wallpapers/wallpaper.jpg');
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+}
+
+.overlay{
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  box-shadow: inset 0 0 40vh 0 rgba(0,0,0,0.6);
+}
+
+.overlay2{
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.black_wallpaper{
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  visibility: hidden;
+}
+
+.color_preview{
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  display: none;
+}
+
+.to_animate{
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: none;
+}
+
+.main_content{
+  position: absolute;
+  width: 100%;
+  padding-top: 30vh;
+  height: 70vh;
+  max-height: 70vh;
+  text-align: center;
+  z-index: 100;
+}
+
+.clock{
+  font-family: SegoeUI;
+  font-size: 13.5vh;
+  line-height: 15vh;
+}
+
+.am_pm{
+  font-size: 5vh;
+  padding-left: 0.5%;
+}
+
+.open_options{
+  height: 3vh;
+  margin-top: 2vh;
+}
+
+.boxes{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  width: auto;
+  font-size: 5vh;
+  line-height: 7vh;
+  text-align: center;
+}
+
+.search_box{
+  width: 100%;
+  font-family: SegoeUILight;
+  font-size: 5vh;
+  line-height: 7vh;
+  text-align: center;
+  color: #FFF;
+  text-shadow: 0px 0px 10px #000;
+  border-style: none;
+  background-color: transparent;
+}
+
+.search_box:focus{
+  outline: none;
+}
+
+.search_box::selection{
+  color: #000;
+  background-color: #FFF;
+}
+
+.pre_helper_box{
+  background-color: transparent;
+  opacity: 0.5;
+  border-style: none;
+  white-space: pre;
+  text-shadow: 0px 0px 10px #000;
+}
+
+.helper_box{
+  background-color: transparent;
+  opacity: 0.5;
+  border-style: none;
+  white-space: pre;
+  text-shadow: 0px 0px 10px #000;
+}
+
+.span_bot{
+  display: none;
+}
+
+.suggestions_wrapper{
+  margin-top: 3vh;
+  height: 36vh;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.suggestions{
+  display: flex;
+  flex-direction: column;
+  font-size: 2vh;
+  text-shadow: 0px 0px 4px #000;
+}
+
+p{
+  width: fit-content;
+  margin: 0 auto 1.4vh auto;
+  padding-bottom: 1vh;
+  font-size: 2.6vh;
+  cursor: pointer;
+}
+
+p.selected{
+  border-bottom: solid 1px #FFF;
+  padding-bottom: calc(1vh - 1px);
+}
+
+.logo{
+  position: fixed;
+  top: 2vh;
+  left: 2vh;
+  width: 4vh;
+  height: auto;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.4s;
+}
+
+.logo:hover{
+  opacity: 1;
+}
+
+.help{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(30% - 6vh);
+  min-width: 300px;
+  height: 89vh;
+  padding: 3vh;
+  padding-top: 8vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: none;
+  overflow-y: auto;
+}
+
+.help_title{
+  font-weight: 600;
+  margin: 12px 0;
+  font-size: 15px;
+}
+
+.help_text{
+  display: block;
+  margin: 8px 0;
+  line-height: 22px;
+}
+
+.help_hr{
+  margin: 18px 0;
+  opacity: 0.25;
+}
+
+.discon{
+  position: fixed;
+  top: 2vh;
+  width: 100%;
+  text-align: center;
+  display: none;
+}
+
+.discon_logo{
+  width: 4vh;
+  height: auto;
+}
+
+.download_wallpaper{
+  position: fixed;
+  width: 100%;
+  bottom: 2vh;
+  text-align: center;
+  display: none;
+  cursor: pointer;
+}
+
+.download_text{
+  color: #FFF;
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.4s;
+}
+
+.download_text:hover{
+  opacity: 1;
+}
+
+.download_icon{
+  width: 1.4vh;
+  height: auto;
+  margin-right: 0.4%;
 }

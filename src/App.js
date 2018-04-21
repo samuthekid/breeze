@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import { compose, withState, withProps } from 'recompose';
-import Layout from './Layout';
-import * as plugins from './plugins';
 import { path, flatten } from 'ramda';
+
+// CSS
+import 'index.css';
+
+// Plugins
+import * as plugins from './plugins';
+
+// Components
+import Layout from './components/Layout';
 import FlatList from './components/List';
+import Background from './components/Background';
+
 
 const cfg = {
   regex: cmd => value => cmd.regex.test(value),
@@ -11,24 +20,36 @@ const cfg = {
 };
 
 class App extends Component {
+
+  setFocus = () => {
+    this.nameInput.focus();
+  }
+
+  componentDidMount() {
+    this.setFocus();
+  }
+
   render() {
     return (
-      <div style={{ width: '100%', height: '100%' }}>
-        <div style={{ height: '100px' }}>
-          <input value={this.props.cmd} onChange={this.props.setCmd} />
-          <FlatList
-            scroll
-            height="10rem"
-            selectable={true}
-            data={this.props.suggestions}
-            renderItem={({ index, item, isSelected }) => {
-              return `${isSelected ? 'selected' : ''} ${item.text}`
-            }}
-            onItemClick={({ onEnter }) => onEnter()}
-          />
-        </div>
-        <Layout />
-      </div>
+      <Background onClick={this.setFocus}>
+        <input
+          className={'search_box'}
+          value={this.props.cmd}
+          onChange={this.props.setCmd}
+          ref={(input) => { this.nameInput = input; }}
+        />
+        <FlatList
+          scroll
+          height="10rem"
+          selectable={true}
+          data={this.props.suggestions}
+          renderItem={({ index, item, isSelected }) => (
+              <p className={isSelected ? 'selected' : undefined}>{item.text}</p>
+            )}
+          onItemClick={({ onEnter }) => onEnter()}
+        />
+        {/* <Layout /> */}
+      </Background>
     );
   }
 }

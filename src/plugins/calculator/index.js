@@ -4,11 +4,11 @@ export const calculator = {
     {
       condition: 'regex',
       label: 'main',
-      regex: /^[\+\-\/\*\%\d\.\(\)]+$/g,
+      regex: /^[\+\-\/\*\%\d\.\(\)]+$/,
       handler: args => [{
         id: 0,
-        onEnter: console.log,
-        text: eval(args),
+        onEnter: () => console.log(args),
+        text: '=' + eval(args),
       }],
     },
   ],

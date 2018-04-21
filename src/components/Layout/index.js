@@ -5,11 +5,11 @@ const ReactGridLayout = WidthProvider(RGL);
 
 class BasicLayout extends React.PureComponent {
   static defaultProps = {
-    items: 10,
-    rowHeight: 200,
+    items: 4,
+    rowHeight: 100,
     rowWidth: 50,
     cols: 5,
-    style: { backgroundColor: 'red', height: 1000 },
+    style: { backgroundColor: 'red', height: 500 },
   };
 
   generateDOM() {
@@ -28,12 +28,6 @@ class BasicLayout extends React.PureComponent {
       { i: 'b', x: 0, y: 1, w: 1, h: 1 },
       { i: 'c', x: 0, y: 2, w: 1, h: 1 },
       { i: 'd', x: 0, y: 3, w: 1, h: 1 },
-      { i: 'e', x: 0, y: 4, w: 1, h: 1 },
-      { i: 'f', x: 1, y: 0, w: 1, h: 1 },
-      { i: 'g', x: 1, y: 1, w: 1, h: 1 },
-      { i: 'h', x: 1, y: 2, w: 1, h: 1 },
-      { i: 'i', x: 1, y: 3, w: 1, h: 1 },
-      { i: 'k', x: 1, y: 4, w: 1, h: 1 },
     ];
     return (
       <ReactGridLayout layout={layout} {...this.props}>
