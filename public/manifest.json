@@ -1,0 +1,14 @@
+{
+	"name": "Breeze - New Tab Page",
+	"description": "Breeze - New Tab Page",
+	"version": "0.3",
+	"author": "Samuel Nunes",
+  "permissions": [
+		"http://*/*", "https://*/*", "tabs", "storage", "background"
+	],
+	"minimum_chrome_version": "40",
+	"manifest_version": 2,
+	"chrome_url_overrides" : {
+		"newtab": "foo.html"
+	}
+}
