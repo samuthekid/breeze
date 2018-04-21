@@ -50,7 +50,7 @@ class App extends Component {
           renderItem={({ index, item, isSelected }) => (
               <p className={isSelected ? 'selected' : undefined}>{item.text}</p>
             )}
-          onItemClick={({ onEnter }) => onEnter()}
+          onItemClick={({ onEnter }) => onEnter != null && onEnter()}
         />
         {/* <Layout /> */}
       </Background>
@@ -74,7 +74,7 @@ const enhance = compose(
               try {
                 return cmd.handler(value);
               } catch (e) {
-                // do nothing
+                console.warn(e);
               }
             else return null;
           })
@@ -82,7 +82,7 @@ const enhance = compose(
 
         return v;
       }, []);
-
+      console.log("flattened handlers: ", suggestions);
       setSuggestions(flatten(suggestions));
     },
   })),

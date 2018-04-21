@@ -1,15 +1,20 @@
+function getSuggestions(args) {
+  return [
+    {
+      id: 0,
+      text: '=' + eval(args),
+    }
+  ];
+}
+
 export const calculator = {
   label: 'calculator',
   cmds: [
     {
       condition: 'regex',
-      label: 'main',
+      label: 'calculator',
       regex: /^[\+\-\/\*\%\d\.\(\)]+$/,
-      handler: args => [{
-        id: 0,
-        onEnter: () => console.log(args),
-        text: '=' + eval(args),
-      }],
+      handler: getSuggestions,
     },
   ],
 };
