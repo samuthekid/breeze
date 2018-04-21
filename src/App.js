@@ -12,6 +12,8 @@ import * as plugins from './plugins';
 import Layout from './components/Layout';
 import FlatList from './components/List';
 import Background from './components/Background';
+import Helper from './components/Helper';
+import Clock from './components/Clock';
 
 
 const cfg = {
@@ -22,7 +24,7 @@ const cfg = {
 class App extends Component {
 
   setFocus = () => {
-    this.nameInput.focus();
+    this.cmdInput.focus();
   }
 
   componentDidMount() {
@@ -32,11 +34,13 @@ class App extends Component {
   render() {
     return (
       <Background onClick={this.setFocus}>
+        <Clock />
+        <Helper text={"teste OMG"} />
         <input
           className={'search_box'}
           value={this.props.cmd}
           onChange={this.props.setCmd}
-          ref={(input) => { this.nameInput = input; }}
+          ref={(input) => { this.cmdInput = input; }}
         />
         <FlatList
           scroll
