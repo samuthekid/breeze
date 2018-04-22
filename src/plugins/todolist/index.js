@@ -9,9 +9,9 @@ let storage = {
 };
 
 function addListItem(value) {
-  storage.list.push(
+  storage.list = [ ...storage.list,
     { id: storage.list.length + 1, text: value.substring(value.indexOf(' '), value.length), done: false }
-  );
+  ];
 };
 
 function toggleItem(value) {
@@ -28,20 +28,20 @@ function removeItem(value) {
   const id = parseInt(value.split(' ')[1]);
   storage.list = storage.list.filter(item => {
     return item.id != id;
-  });
+  }).map((item, i) => ({ ...item, id: i + 1 }));
 };
 
 function removeDone(value) {
   const id = parseInt(value.split(' ')[1]);
   storage.list = storage.list.filter(item => {
     return !item.done;
-  });
+  }).map((item, i) => ({ ...item, id: i + 1 }));
 };
 
 const Widget = ({ list }) => {
   return <div style={{ height: '100px' }}>
     {list.map(todo => (
-      <p>{todo.id} - {todo.text} {todo.done ? 'X' : '_' }</p>
+      <p key={todo.id}>{todo.id} - {todo.text} {todo.done ? 'X' : '_' }</p>
     ))}
   </div>;
 };
