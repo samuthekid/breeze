@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { compose, withState, withProps } from 'recompose';
 import { path, flatten } from 'ramda';
+import Fuse from 'fuse.js';
 
 // CSS
 import 'index.css';
@@ -18,7 +19,8 @@ import Clock from './components/Clock';
 const cfg = {
   regex: cmd => value => cmd.regex.test(value),
   beTrue: cmd => value => true,
-  startsWith: cmd => (value, plugin) => value.startsWith(plugin.label),
+  // startsWith: cmd => (value, plugin) => value.startsWith(plugin.label),
+  startsWith: cmd => (value, plugin) => true,
 };
 
 class App extends Component {
@@ -33,7 +35,7 @@ class App extends Component {
   render() {
     return (
       <Background onClick={this.setFocus}>
-        <div className='logo'></div>
+        <div className="logo" />
         <Clock />
         <input
           className={'search_box'}
@@ -44,7 +46,7 @@ class App extends Component {
           }}
         />
         <FlatList
-          header={(item) => (<Helper text={item.help} />)}
+          header={item => <Helper text={item.help} />}
           height="10rem"
           selectable={true}
           data={this.props.suggestions}
@@ -58,10 +60,8 @@ class App extends Component {
 
         <Layout widgets={this.props.widgets} />
         <div className="help_wrapper flex_vam_sb">
-          <div className="help_icon"></div>
-          <div>
-            download this wallpaper
-          </div>
+          <div className="help_icon" />
+          <div>download this wallpaper</div>
         </div>
       </Background>
     );
@@ -92,36 +92,65 @@ const enhance = compose(
       setCmd(value);
 
       const suggestions = value.length
-        ? Object.values(plugins).reduce((acc, plugin) => {
-            const v = acc.concat(
-              plugin.cmds
-                .map(cmd => {
-                  const checker = cfg[cmd.condition];
+        ? flatten(
+            Object.values(plugins).reduce((acc, plugin) => {
+              const v = acc.concat(
+                plugin.cmds
+                  .map(cmd => {
+                    const checker = cfg[cmd.condition];
 
-                  if (checker(cmd)(value, plugin))
-                    try {
-                      return cmd.handler(value, {
-                        addWidget,
-                        mutateWidgetState,
-                      });
-                    } catch (e) {
-                      console.warn(e);
-                      // do nothing
-                    }
-                  else return null;
-                })
-                .filter(ele => !!ele),
-            );
-            return v;
-          }, [])
+                    if (checker(cmd)(value, plugin))
+                      try {
+                        return cmd.handler(value, {
+                          addWidget,
+                          mutateWidgetState,
+                        });
+                      } catch (e) {
+                        console.warn(e);
+                        // do nothing
+                      }
+                    else return null;
+                  })
+                  .filter(ele => !!ele),
+              );
+              return v;
+            }, []),
+          )
         : [];
 
-      const flattenSuggestions = !suggestions.length
-        ? []
-        : flatten(suggestions).sort(
-            (a, b) => (a.text.indexOf(value) > b.text.indexOf(value) ? -1 : 1),
-          );
-      setSuggestions(flattenSuggestions);
+      if (suggestions.length > 2) {
+        const last = suggestions.pop();
+
+        const options = {
+          caseSensitive: false,
+          shouldSort: true,
+          threshold: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['text'],
+        };
+        const fuse = new Fuse(suggestions, options);
+        const result = fuse.search(value).slice(0, 3);
+
+        result.push(last);
+
+        setSuggestions(result);
+      } else {
+        const options = {
+          caseSensitive: false,
+          shouldSort: true,
+          threshold: 0,
+          distance: 100,
+          maxPatternLength: 32,
+          minMatchCharLength: 1,
+          keys: ['text'],
+        };
+        const fuse = new Fuse(suggestions, options);
+        const result = fuse.search(value);
+
+        setSuggestions(result);
+      }
     },
   })),
 );

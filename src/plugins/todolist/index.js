@@ -117,7 +117,7 @@ export const todolist = {
               state: storage,
             })
           },
-          text: 'todo remove <id>',
+          text: 'todo rm <id>',
           help: 'Remove item with id',
         },
       ],
@@ -135,7 +135,7 @@ export const todolist = {
               state: storage,
             })
           },
-          text: 'Remove all checked items',
+          text: 'todo rm checked',
           help: 'Remove all checked items',
         },
       ],
