@@ -1,22 +1,36 @@
-
+/*WRAPPERS*/
+.flex_vam_sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/*FONTS*/
 @font-face {
-  font-family: SegoeUILight;
-  src: url('fonts/segoeuil.ttf');
-  src: url('fonts/segoeuil.woff');
+  font-family: G;
+  src: url('fonts/GRegular.ttf');
 }
 
 @font-face {
-  font-family: SegoeUI;
-  src: url('fonts/segoeui.ttf');
-  src: url('fonts/segoeui.woff');
+  font-family: FDLight;
+  src: url('fonts/FDLight.ttf');
 }
 
 @font-face {
-  font-family: SegoeUIBold;
-  src: url('fonts/segoeuib.ttf');
-  src: url('fonts/segoeuib.woff');
+  font-family: RobotoThin;
+  src: url('fonts/RobotoThin.ttf');
+}
+/*BASE*/
+h1 {
+
 }
 
+h2 {
+
+}
+
+p {
+
+}
 ::-webkit-scrollbar {
   width: 2px;
 }
@@ -34,7 +48,7 @@
 }
 
 body{
-  font-family: SegoeUILight;
+  font-family: G;
   font-size: 1.6vh;
   font-weight: 100;
   color: #FFF;
@@ -50,7 +64,7 @@ input:focus{
 }
 
 .wallpaper {
-  background: url('wallpapers/wallpaper.jpg');
+  background: url('wallpapers/wallpaper.png');
   position: absolute;
   width: 100%;
   height: 100vh;
@@ -104,7 +118,7 @@ input:focus{
 }
 
 .clock{
-  font-family: SegoeUI;
+  font-family: RobotoThin;
   font-size: 13.5vh;
   line-height: 15vh;
 }
@@ -132,7 +146,6 @@ input:focus{
 
 .search_box{
   width: 100%;
-  font-family: SegoeUILight;
   font-size: 5vh;
   line-height: 7vh;
   text-align: center;
@@ -200,33 +213,37 @@ p.selected{
 
 .logo{
   position: fixed;
-  top: 2vh;
-  left: 2vh;
-  width: 4vh;
-  height: auto;
-  cursor: pointer;
-  opacity: 0.5;
-  transition: opacity 0.4s;
+  top: 2.4rem;
+  left: 2.4rem;
+  width: 5.3rem;
+  height: 3.5rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 1;
+  background-image: url('img/logo.svg');
 }
 
-.logo:hover{
+.help_wrapper {
+  position: fixed;
+  bottom: 2.4rem;
+  left: 2.4rem;
+  width: calc(100% - 4.8rem);
+}
+
+.help_icon {
+  width: 3rem;
+  height: 3rem;
+  background-image: url('img/help.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: .2s ease-in-out;
+}
+
+.help:hover {
   opacity: 1;
 }
-
-.help{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc(30% - 6vh);
-  min-width: 300px;
-  height: 89vh;
-  padding: 3vh;
-  padding-top: 8vh;
-  background: rgba(0, 0, 0, 0.65);
-  display: none;
-  overflow-y: auto;
-}
-
 .help_title{
   font-weight: 600;
   margin: 12px 0;

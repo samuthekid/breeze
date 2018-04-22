@@ -33,6 +33,7 @@ class App extends Component {
   render() {
     return (
       <Background onClick={this.setFocus}>
+        <div className='logo'></div>
         <Clock />
         <input
           className={'search_box'}
@@ -56,6 +57,12 @@ class App extends Component {
         />
 
         <Layout widgets={this.props.widgets} />
+        <div className="help_wrapper flex_vam_sb">
+          <div className="help_icon"></div>
+          <div>
+            download this wallpaper
+          </div>
+        </div>
       </Background>
     );
   }
