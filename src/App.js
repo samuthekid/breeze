@@ -34,7 +34,6 @@ class App extends Component {
     return (
       <Background onClick={this.setFocus}>
         <Clock />
-        <Helper text={'teste OMG'} />
         <input
           className={'search_box'}
           value={this.props.cmd}
@@ -44,7 +43,7 @@ class App extends Component {
           }}
         />
         <FlatList
-          scroll
+          header={(item) => (<Helper text={item.help} />)}
           height="10rem"
           selectable={true}
           data={this.props.suggestions}
@@ -112,7 +111,6 @@ const enhance = compose(
         : flatten(suggestions).sort(
             (a, b) => (a.text.indexOf(value) > b.text.indexOf(value) ? -1 : 1),
           );
-
       setSuggestions(flattenSuggestions);
     },
   })),

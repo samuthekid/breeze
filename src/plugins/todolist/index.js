@@ -64,7 +64,7 @@ export const todolist = {
               state: storage,
             }),
           text: 'todo widget open',
-          help: 'Show ToDo List widget',
+          help: 'Show todo list widget',
         },
       ],
     },
