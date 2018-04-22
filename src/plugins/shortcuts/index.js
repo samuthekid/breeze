@@ -7,7 +7,6 @@ function getSuggestions(args, _, props) {
       const short = shortcut.state;
 
       if (short.match.includes(args)) {
-        debugger;
         return {
           id: 'short_' + index,
           text: short.match,
