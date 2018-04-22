@@ -18,6 +18,7 @@ import Clock from './components/Clock';
 const cfg = {
   regex: cmd => value => cmd.regex.test(value),
   beTrue: cmd => value => true,
+  startsWith: cmd => (value, plugin) => value.startsWith(plugin.label)
 };
 
 class App extends Component {
@@ -47,12 +48,16 @@ class App extends Component {
           height="10rem"
           selectable={true}
           data={this.props.suggestions}
-          renderItem={({ index, item, isSelected }) => (
+          renderItem={({ index, item, isSelected }) => {
+            return (
             <p className={isSelected ? 'selected' : undefined}>{item.text}</p>
-          )}
-          onItemClick={({ onEnter }) => onEnter()}
+          )}}
+          onItemClick={({ onEnter }) => {
+            onEnter != null && onEnter();
+          }}
         />
-        {/* <Layout /> */}
+
+        <Layout widgets={this.props.widgets} />
       </Background>
     );
   }
@@ -62,10 +67,19 @@ const enhance = compose(
   withState('cmd', 'setCmd', ''),
   withState('suggestions', 'setSuggestions', []),
   withState('widgets', 'setWidgets', []),
-  withProps(props => {
-    addWidget: element => props.setSuggestions(...props.suggestions, element);
-  }),
-  withProps(({ setCmd, setSuggestions, addWidget }) => ({
+  withProps(props => ({
+    addWidget: element => props.setWidgets([...props.widgets, element]),
+    mutateWidgetState: element => {
+      const w = props.widgets.filter(
+        ele => !(ele.name === element.name && ele.plugin === element.plugin),
+      );
+
+      w.push(element);
+
+      props.setWidgets(w);
+    },
+  })),
+  withProps(({ setCmd, setSuggestions, addWidget, mutateWidgetState }) => ({
     setCmd: ({ target: { value } }) => {
       setCmd(value);
 
@@ -75,20 +89,19 @@ const enhance = compose(
             .map(cmd => {
               const checker = cfg[cmd.condition];
 
-              if (checker(cmd)(value))
+              if (checker(cmd)(value, plugin))
                 try {
-                  return cmd.handler(value, addWidget);
+                  return cmd.handler(value, { addWidget, mutateWidgetState });
                 } catch (e) {
+                  console.warn(e);
                   // do nothing
                 }
               else return null;
             })
             .filter(ele => !!ele),
         );
-
         return v;
       }, []);
-
       setSuggestions(flatten(suggestions));
     },
   })),

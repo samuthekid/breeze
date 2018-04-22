@@ -1,7 +1,8 @@
 import React from 'react';
+import { GenericWeather } from 'react-weather';
 
-const Widget = ({ city, country }) => {
-  return <div>Lolipos</div>;
+const Widget = ({ city }) => {
+  return <div style={{ height: '100px' }}>{city}</div>;
 };
 
 export const weather = {
@@ -11,13 +12,28 @@ export const weather = {
   },
   cmds: [
     {
-      condition: 'beTrue',
+      condition: 'startsWith',
       label: 'open widget',
-      handler: (args, { addWidget }) => [
+      handler: (args, { addWidget, mutateWidgetState }) => [
         {
-          id: 0,
-          onEnter: () => addWidget('main'),
-          text: 'Open weather widget' 
+          id: 'w_0',
+          onEnter: () =>
+            addWidget({
+              plugin: 'weather',
+              name: 'main',
+              state: { city: 'Coimbra2' },
+            }),
+          text: 'Add weather widget',
+        },
+        {
+          id: 'w_1',
+          onEnter: () =>
+            mutateWidgetState({
+              plugin: 'weather',
+              name: 'main',
+              state: { city: args },
+            }),
+          text: 'Change city',
         },
       ],
     },
