@@ -1,8 +1,9 @@
 function getSuggestions(args) {
-  return args && args !== '' && [
+  return [
     {
-      id: 0,
-      text: "Search " + args,
+      id: 'search',
+      text: "Search this", 
+      help: "See Google results", 
       onEnter: () => window.location.replace(
         'https://www.google.pt/search?q=' + escape(args),
       )

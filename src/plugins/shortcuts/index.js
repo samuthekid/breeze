@@ -7,11 +7,12 @@ function getSuggestions(args, _, props) {
       const short = shortcut.state;
 
       if (short.match.includes(args)) {
+        debugger;
         return {
-          id: index,
+          id: 'short_' + index,
           onEnter: () => window.location.replace(short.url),
           text: short.match,
-          help: `Go to ${short.url}`,
+          help: 'Open ' + short.url,
         }
       }
 
@@ -38,7 +39,7 @@ export const shortcuts = {
       condition: 'startsWith',
       label: 'add',
       handler: (args, { addShortcut, mutateWidgetState }, _) => ({
-        id: 0,
+        id: 'short_add',
         text: 'shortcuts add <name> <url>',
         help: 'Add shortcut <name> <url>',
         onEnter: () =>
@@ -54,10 +55,21 @@ export const shortcuts = {
           })
         }),
     },
-    //{
-    //  condition: 'startsWith',
-    //  label: 'remove',
-    //  handler: deleteShortcut,
-    //}
+    {
+      condition: 'startsWith',
+      label: 'remove',
+      handler: (args, { removeShortcut, mutateWidgetState}, _) => ({
+        id: 'short_rm',
+        text: 'shortcuts remove <name>',
+        help: 'Remove shortcut <name>',
+        onEnter: () =>
+          removeShortcut(shortcuts => {
+            console.log('SHORTCUT REMOVED');
+            return (shortcuts.filter((short) =>
+              short.state.match != args.split(' ')[2]
+            ));
+          })
+      }),
+    }
   ],
 };

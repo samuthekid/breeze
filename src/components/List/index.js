@@ -13,6 +13,7 @@ export class List extends React.Component {
     onItemClick: PropTypes.func,
     style: PropTypes.string,
     renderItem: PropTypes.func.isRequired,
+    header: PropTypes.func,
     footer: PropTypes.element,
     height: PropTypes.string,
     selectedItem: PropTypes.number,
@@ -110,6 +111,7 @@ export class List extends React.Component {
       height,
       filteredData,
       footer,
+      header
     } = this.props;
 
     const withData =
@@ -122,6 +124,7 @@ export class List extends React.Component {
         className={style}
         style={{ overflowY: scroll && 'scroll', maxHeight: height }}
       >
+        {header(filteredData[selectedItem] || {})}
         {sections == null
           ? renderFlatList({
               filteredData,

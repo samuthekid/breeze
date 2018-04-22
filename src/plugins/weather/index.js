@@ -1,9 +1,57 @@
 import React from 'react';
-import { GenericWeather } from 'react-weather';
+import moment from 'moment';
 
-const Widget = ({ city }) => {
-  return <div style={{ height: '100px' }}>{city}</div>;
-};
+
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+const API = city =>
+  `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${city}")&format=json`;
+
+class Widget extends React.Component {
+  state = {
+    loading: false,
+    data: null,
+  };
+
+  componentWillMount() {
+    fetch(API(this.props.city))
+      .then(res => res.json())
+      .then(({ query: { results } }) => results)
+      .then(({ channel: { item } }) => item)
+      .then(data => this.setState({ data }));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    fetch(API(nextProps.city))
+      .then(res => res.json())
+      .then(({ query: { results } }) => results)
+      .then(({ channel: { item } }) => item)
+      .then(data => this.setState({ data }));
+  }
+
+  render() {
+    const { city } = this.props;
+    const { data } = this.state;
+
+    if (data == null) return null;
+
+    return (
+      <div>
+        <div>{data.condition.temp}</div>
+        <div>{data.condition.text}</div>
+        <div>{data.condition.date.substring(0, 3)}</div>
+        <div style={{ display: 'flex' }}>
+          {data.forecast.slice(1, 5).map(day => (
+            <div key={day.date}>
+              {day.high}
+              {day.day}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
 
 export const weather = {
   label: 'weather',
@@ -21,19 +69,27 @@ export const weather = {
             addWidget({
               plugin: 'weather',
               name: 'main',
-              state: { city: 'Coimbra2' },
+              state: { city: 'Coimbra' },
             }),
-          text: 'Add weather widget',
+          text: 'weather widget open',
+          help: 'Show weather widget',
         },
+      ],
+    },
+    {
+      condition: 'startsWith',
+      label: 'change city',
+      handler: (args, { addWidget, mutateWidgetState }) => [
         {
           id: 'w_1',
           onEnter: () =>
             mutateWidgetState({
               plugin: 'weather',
               name: 'main',
-              state: { city: args },
+              state: { city: args.split(' ')[2] },
             }),
-          text: 'Change city',
+          text: 'weather city <city>',
+          help: 'Set weather city',
         },
       ],
     },

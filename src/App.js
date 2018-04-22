@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { compose, withState, withProps } from 'recompose';
 import { path, flatten } from 'ramda';
+import Fuse from 'fuse.js';
 
 // CSS
 import 'index.css';
@@ -18,7 +19,8 @@ import Clock from './components/Clock';
 const cfg = {
   regex: cmd => value => cmd.regex.test(value),
   beTrue: cmd => value => true,
-  startsWith: cmd => (value, plugin) => value.startsWith(plugin.label)
+  // startsWith: cmd => (value, plugin) => value.startsWith(plugin.label),
+  startsWith: cmd => (value, plugin) => true,
 };
 
 class App extends Component {
@@ -33,8 +35,8 @@ class App extends Component {
   render() {
     return (
       <Background onClick={this.setFocus}>
+        <div className="logo" />
         <Clock />
-        <Helper text={'teste OMG'} />
         <input
           className={'search_box'}
           value={this.props.cmd}
@@ -44,17 +46,23 @@ class App extends Component {
           }}
         />
         <FlatList
-          scroll
+          header={item => <Helper text={item.help} />}
           height="10rem"
           selectable={true}
           data={this.props.suggestions}
           renderItem={({ index, item, isSelected }) => (
-              <p className={isSelected ? 'selected' : undefined}>{item.text}</p>
-            )}
+            <p id={item.id} className={isSelected ? 'selected' : undefined}>
+              {item.text}
+            </p>
+          )}
           onItemClick={({ onEnter }) => onEnter != null && onEnter()}
         />
 
         <Layout widgets={this.props.widgets} />
+        <div className="help_wrapper flex_vam_sb">
+          <div className="help_icon" />
+          <div>download this wallpaper</div>
+        </div>
       </Background>
     );
   }
@@ -67,7 +75,10 @@ const enhance = compose(
   withState('shortcuts', 'setShortcuts', []),
   withProps(props => ({
     addWidget: element => props.setWidgets([...props.widgets, element]),
-    mutateWidgetState: element => {
+    mutateWidgetState: mutate => {
+      const element =
+        typeof mutate === 'object' ? mutate : mutate(props.widgets);
+
       const w = props.widgets.filter(
         ele => !(ele.name === element.name && ele.plugin === element.plugin),
       );
@@ -84,7 +95,9 @@ const enhance = compose(
       props.setShortcuts([...props.shortcuts, wtv])
     },
     removeShortcut: mutate => {
+      const wtf = mutate(props.shortcuts);
 
+      props.setShortcuts(wtf);
     },
   })),
   withProps((props) => {
@@ -94,26 +107,68 @@ const enhance = compose(
       setCmd: ({ target: { value } }) => {
         setCmd(value);
 
-        const suggestions = Object.values(plugins).reduce((acc, plugin) => {
-          const v = acc.concat(
-            plugin.cmds
-              .map(cmd => {
-                const checker = cfg[cmd.condition];
+        const suggestions = value.length
+          ? flatten(
+              Object.values(plugins).reduce((acc, plugin) => {
+                const v = acc.concat(
+                  plugin.cmds
+                    .map(cmd => {
+                      const checker = cfg[cmd.condition];
 
-                if (checker(cmd)(value, plugin))
-                  try {
-                    return cmd.handler(value, { addWidget, mutateWidgetState, addShortcut, removeShortcut }, props);
-                  } catch (e) {
-                    console.warn(e);
-                    // do nothing
-                  }
-                else return null;
-              })
-              .filter(ele => !!ele),
-          );
-          return v;
-        }, []);
-        setSuggestions(flatten(suggestions));
+                      if (checker(cmd)(value, plugin))
+                        try {
+                          return cmd.handler(value, {
+                            addWidget,
+                            mutateWidgetState,
+                            addShortcut,
+                            removeShortcut,
+                          }, props);
+                        } catch (e) {
+                          console.warn(e);
+                          // do nothing
+                        }
+                      else return null;
+                    })
+                    .filter(ele => !!ele),
+                );
+                return v;
+              }, []),
+            )
+          : [];
+
+        if (suggestions.length > 2) {
+          const last = suggestions.pop();
+
+          const options = {
+            caseSensitive: false,
+            shouldSort: true,
+            threshold: 0.5,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: ['text'],
+          };
+          const fuse = new Fuse(suggestions, options);
+          const result = fuse.search(value).slice(0, 3);
+
+          result.push(last);
+
+          setSuggestions(result);
+        } else {
+          const options = {
+            caseSensitive: false,
+            shouldSort: true,
+            threshold: 0.5,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: ['text'],
+          };
+          const fuse = new Fuse(suggestions, options);
+          const result = fuse.search(value);
+
+          setSuggestions(result);
+        }
       },
     });
   }),
