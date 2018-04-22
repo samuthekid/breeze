@@ -1,55 +1,31 @@
 import React from 'react';
 
-let storage = {
-  shortcuts: [
-    {
-      match: "youtube",
-      url: "https://youtube.com/",
-    },
-    {
-      match: "reddit",
-      url: "https://reddit.com/",
-    },
-    {
-      match: "gmail",
-      url: "https://gmail.com/",
-    },
-  ],
-};
+function getSuggestions(args, _, props) {
+  return props.shortcuts
+    .filter((plug) => plug.plugin === 'shortcuts')
+    .map((shortcut, index) => {
+      const short = shortcut.state;
 
-function getSuggestions(args) {
-  return storage.shortcuts.map((shortcut, index) => {
-    if (shortcut.match.includes(args)) {
-      return {
-        id: index,
-        onEnter: () => window.location.replace(shortcut.url),
-        text: shortcut.match,
+      if (short.match.includes(args)) {
+        return {
+          id: index,
+          onEnter: () => window.location.replace(short.url),
+          text: short.match,
+          help: `Go to ${short.url}`,
+        }
       }
-    }
 
-    return null;
+      return null;
   }).filter((suggestion) => suggestion != null);
 }
 
-//function saveShortcut(args) {
-//  return {
-//    id: 0,
-//    text: 'Add shortcut',
-//    onEnter: () => addShortcut({
-//      state: {
-//
-//      }
-//    }),
-//  }
-//}
-//
-//function deleteShortcut(args) {
-//  return {
-//    id: 0,
-//    text: 'Remove shortcut',
-//    onEnter: () => removeShortcut(args),
-//  }
-//}
+function getName(args) {
+  return args.split(' ')[2];
+}
+
+function getUrl(args) {
+  return args.split(' ')[3];
+}
 
 export const shortcuts = {
   label: 'shortcuts',
@@ -58,11 +34,26 @@ export const shortcuts = {
       condition: 'beTrue',
       handler: getSuggestions,
     },
-    //{
-    //  condition: 'startsWith',
-    //  label: 'add',
-    //  handler: saveShortcut,
-    //},
+    {
+      condition: 'startsWith',
+      label: 'add',
+      handler: (args, { addShortcut, mutateWidgetState }, _) => ({
+        id: 0,
+        text: 'shortcuts add <name> <url>',
+        help: 'Add shortcut <name> <url>',
+        onEnter: () =>
+          addShortcut(shortcuts => {
+            console.log('SHORTCUT ADDED');
+            return {
+              plugin: 'shortcuts',
+              state: {
+                match: getName(args),
+                url: getUrl(args),
+              }
+            }
+          })
+        }),
+    },
     //{
     //  condition: 'startsWith',
     //  label: 'remove',

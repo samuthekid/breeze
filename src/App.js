@@ -64,6 +64,7 @@ const enhance = compose(
   withState('cmd', 'setCmd', ''),
   withState('suggestions', 'setSuggestions', []),
   withState('widgets', 'setWidgets', []),
+  withState('shortcuts', 'setShortcuts', []),
   withProps(props => ({
     addWidget: element => props.setWidgets([...props.widgets, element]),
     mutateWidgetState: element => {
@@ -76,32 +77,46 @@ const enhance = compose(
       props.setWidgets(w);
     },
   })),
-  withProps(({ setCmd, setSuggestions, addWidget, mutateWidgetState }) => ({
-    setCmd: ({ target: { value } }) => {
-      setCmd(value);
+  withProps(props => ({
+    addShortcut: mutate => {
+      const wtv = mutate(props.shortcuts);
 
-      const suggestions = Object.values(plugins).reduce((acc, plugin) => {
-        const v = acc.concat(
-          plugin.cmds
-            .map(cmd => {
-              const checker = cfg[cmd.condition];
+      props.setShortcuts([...props.shortcuts, wtv])
+    },
+    removeShortcut: mutate => {
 
-              if (checker(cmd)(value, plugin))
-                try {
-                  return cmd.handler(value, { addWidget, mutateWidgetState });
-                } catch (e) {
-                  console.warn(e);
-                  // do nothing
-                }
-              else return null;
-            })
-            .filter(ele => !!ele),
-        );
-        return v;
-      }, []);
-      setSuggestions(flatten(suggestions));
     },
   })),
+  withProps((props) => {
+    const { setCmd, setSuggestions, addWidget, mutateWidgetState, addShortcut, removeShortcut } = props;
+
+    return ({
+      setCmd: ({ target: { value } }) => {
+        setCmd(value);
+
+        const suggestions = Object.values(plugins).reduce((acc, plugin) => {
+          const v = acc.concat(
+            plugin.cmds
+              .map(cmd => {
+                const checker = cfg[cmd.condition];
+
+                if (checker(cmd)(value, plugin))
+                  try {
+                    return cmd.handler(value, { addWidget, mutateWidgetState, addShortcut, removeShortcut }, props);
+                  } catch (e) {
+                    console.warn(e);
+                    // do nothing
+                  }
+                else return null;
+              })
+              .filter(ele => !!ele),
+          );
+          return v;
+        }, []);
+        setSuggestions(flatten(suggestions));
+      },
+    });
+  }),
 );
 
 export default enhance(App);
