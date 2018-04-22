@@ -75,6 +75,7 @@ const enhance = compose(
   withState('cmd', 'setCmd', ''),
   withState('suggestions', 'setSuggestions', []),
   withState('widgets', 'setWidgets', []),
+  withState('shortcuts', 'setShortcuts', []),
   withProps(props => ({
     addWidget: element => props.setWidgets([...props.widgets, element]),
     mutateWidgetState: mutate => {
@@ -90,72 +91,90 @@ const enhance = compose(
       props.setWidgets(w);
     },
   })),
-  withProps(({ setCmd, setSuggestions, addWidget, mutateWidgetState }) => ({
-    setCmd: ({ target: { value } }) => {
-      setCmd(value);
+  withProps(props => ({
+    addShortcut: mutate => {
+      const wtv = mutate(props.shortcuts);
 
-      const suggestions = value.length
-        ? flatten(
-            Object.values(plugins).reduce((acc, plugin) => {
-              const v = acc.concat(
-                plugin.cmds
-                  .map(cmd => {
-                    const checker = cfg[cmd.condition];
+      props.setShortcuts([...props.shortcuts, wtv])
+    },
+    removeShortcut: mutate => {
+      const wtf = mutate(props.shortcuts);
 
-                    if (checker(cmd)(value, plugin))
-                      try {
-                        return cmd.handler(value, {
-                          addWidget,
-                          mutateWidgetState,
-                        });
-                      } catch (e) {
-                        console.warn(e);
-                        // do nothing
-                      }
-                    else return null;
-                  })
-                  .filter(ele => !!ele),
-              );
-              return v;
-            }, []),
-          )
-        : [];
-
-      if (suggestions.length > 2) {
-        const last = suggestions.pop();
-
-        const options = {
-          caseSensitive: false,
-          shouldSort: true,
-          threshold: 0,
-          distance: 100,
-          maxPatternLength: 32,
-          minMatchCharLength: 1,
-          keys: ['text'],
-        };
-        const fuse = new Fuse(suggestions, options);
-        const result = fuse.search(value).slice(0, 3);
-
-        result.push(last);
-
-        setSuggestions(result);
-      } else {
-        const options = {
-          caseSensitive: false,
-          shouldSort: true,
-          threshold: 0,
-          distance: 100,
-          maxPatternLength: 32,
-          minMatchCharLength: 1,
-          keys: ['text'],
-        };
-        const fuse = new Fuse(suggestions, options);
-        const result = fuse.search(value);
-
-        setSuggestions(result);
-      }
+      props.setShortcuts(wtf);
     },
   })),
+  withProps((props) => {
+    const { setCmd, setSuggestions, addWidget, mutateWidgetState, addShortcut, removeShortcut } = props;
+
+    return ({
+      setCmd: ({ target: { value } }) => {
+        setCmd(value);
+
+        const suggestions = value.length
+          ? flatten(
+              Object.values(plugins).reduce((acc, plugin) => {
+                const v = acc.concat(
+                  plugin.cmds
+                    .map(cmd => {
+                      const checker = cfg[cmd.condition];
+
+                      if (checker(cmd)(value, plugin))
+                        try {
+                          return cmd.handler(value, {
+                            addWidget,
+                            mutateWidgetState,
+                            addShortcut,
+                            removeShortcut,
+                          }, props);
+                        } catch (e) {
+                          console.warn(e);
+                          // do nothing
+                        }
+                      else return null;
+                    })
+                    .filter(ele => !!ele),
+                );
+                return v;
+              }, []),
+            )
+          : [];
+
+        if (suggestions.length > 2) {
+          const last = suggestions.pop();
+
+          const options = {
+            caseSensitive: false,
+            shouldSort: true,
+            threshold: 0.5,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: ['text'],
+          };
+          const fuse = new Fuse(suggestions, options);
+          const result = fuse.search(value).slice(0, 3);
+
+          result.push(last);
+
+          setSuggestions(result);
+        } else {
+          const options = {
+            caseSensitive: false,
+            shouldSort: true,
+            threshold: 0.5,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: ['text'],
+          };
+          const fuse = new Fuse(suggestions, options);
+          const result = fuse.search(value);
+
+          setSuggestions(result);
+        }
+      },
+    });
+  }),
 );
 
 export default enhance(App);
