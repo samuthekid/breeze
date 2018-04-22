@@ -1,5 +1,4 @@
 import React from 'react';
-import { GenericWeather } from 'react-weather';
 import moment from 'moment';
 
 
