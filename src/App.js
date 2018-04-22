@@ -68,7 +68,10 @@ const enhance = compose(
   withState('widgets', 'setWidgets', []),
   withProps(props => ({
     addWidget: element => props.setWidgets([...props.widgets, element]),
-    mutateWidgetState: element => {
+    mutateWidgetState: mutate => {
+      const element =
+        typeof mutate === 'object' ? mutate : mutate(props.widgets);
+
       const w = props.widgets.filter(
         ele => !(ele.name === element.name && ele.plugin === element.plugin),
       );

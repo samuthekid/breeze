@@ -1,5 +1,5 @@
 function getSuggestions(args) {
-  return args && args !== '' && [
+  return [
     {
       id: 0,
       text: "Search this", 

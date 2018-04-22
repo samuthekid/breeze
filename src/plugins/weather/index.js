@@ -51,7 +51,6 @@ class Widget extends React.Component {
         </div>
       </div>
     );
-    return <div dangerouslySetInnerHTML={{ __html: data }} />;
   }
 }
 
