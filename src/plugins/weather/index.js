@@ -36,18 +36,18 @@ class Widget extends React.Component {
     if (data == null) return null;
 
     return (
-      <div>
-        <div>{data.condition.temp}</div>
-        <div>{data.condition.text}</div>
-        <div>{data.condition.date.substring(0, 3)}</div>
-        <div style={{ display: 'flex' }}>
+      <div style={{ height: '100%' }}>
+        <p>{data.condition.temp}</p>
+        <p>{data.condition.text}</p>
+        <p>{data.condition.date.substring(0, 3)}</p>
+        <p style={{ display: 'flex', flexDirection: 'row' }}>
           {data.forecast.slice(1, 5).map(day => (
-            <div key={day.date}>
-              {day.high}
-              {day.day}
+            <div style={{ margin: '8px' }}>
+              <p key={"tmp" + day.date}>{day.high}</p>
+              <p key={"day" + day.date}>{day.day}</p>
             </div>
           ))}
-        </div>
+        </p>
       </div>
     );
   }

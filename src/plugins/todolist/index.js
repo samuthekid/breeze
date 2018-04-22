@@ -39,7 +39,7 @@ function removeDone(value) {
 };
 
 const Widget = ({ list }) => {
-  return <div style={{ height: '100px' }}>
+  return <div style={{ height: '100%' }}>
     {list.map(todo => (
       <p key={todo.id}>{todo.id} - {todo.text} {todo.done ? 'X' : '_' }</p>
     ))}

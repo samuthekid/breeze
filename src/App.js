@@ -58,7 +58,10 @@ class App extends Component {
           onItemClick={({ onEnter }) => onEnter != null && onEnter()}
         />
 
-        <Layout widgets={this.props.widgets} />
+        {!this.props.suggestions.length &&
+          <Layout widgets={this.props.widgets} />
+        }
+
         <div className="help_wrapper flex_vam_sb">
           <div className="help_icon" />
           <div>download this wallpaper</div>
