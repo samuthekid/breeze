@@ -136,6 +136,7 @@ export const todolist = {
             })
           },
           text: 'Remove all checked items',
+          help: 'Remove all checked items',
         },
       ],
     },
