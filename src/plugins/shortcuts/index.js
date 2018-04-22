@@ -10,9 +10,9 @@ function getSuggestions(args, _, props) {
         debugger;
         return {
           id: 'short_' + index,
-          onEnter: () => window.location.replace(short.url),
           text: short.match,
           help: 'Open ' + short.url,
+          onEnter: () => window.location.replace(short.url),
         }
       }
 
@@ -25,7 +25,13 @@ function getName(args) {
 }
 
 function getUrl(args) {
-  return args.split(' ')[3];
+  let url = args.split(' ')[3];
+
+  if (!url.includes('http://')) {
+    return 'http://' + url;
+  }
+
+  return url;
 }
 
 export const shortcuts = {
@@ -44,7 +50,7 @@ export const shortcuts = {
         help: 'Add shortcut <name> <url>',
         onEnter: () =>
           addShortcut(shortcuts => {
-            console.log('SHORTCUT ADDED');
+            console.log('ADD SHORTCUT');
             return {
               plugin: 'shortcuts',
               state: {
@@ -64,7 +70,7 @@ export const shortcuts = {
         help: 'Remove shortcut <name>',
         onEnter: () =>
           removeShortcut(shortcuts => {
-            console.log('SHORTCUT REMOVED');
+            console.log('REMOVE SHORTCUT');
             return (shortcuts.filter((short) =>
               short.state.match != args.split(' ')[2]
             ));
