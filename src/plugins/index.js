@@ -1,4 +1,7 @@
 export { calculator } from './calculator';
-export { googleSearch } from './google-search';
 export { shortcuts } from './shortcuts';
 export { weather } from './weather';
+export { todolist } from './todolist';
+
+// Always last
+export { googleSearch } from './google-search';

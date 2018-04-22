@@ -2,6 +2,7 @@ import React from 'react';
 import { GenericWeather } from 'react-weather';
 import moment from 'moment';
 
+
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const API = city =>
