@@ -1,22 +1,29 @@
 import React from 'react';
 import _ from 'lodash';
 import RGL, { WidthProvider } from 'react-grid-layout';
+import * as plugins from '../../plugins';
 const ReactGridLayout = WidthProvider(RGL);
 
 class BasicLayout extends React.PureComponent {
-  static defaultProps = {
-    items: 4,
-    rowHeight: 100,
-    rowWidth: 50,
-    cols: 5,
-    style: { backgroundColor: 'red', height: 500 },
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: props.widgets.length,
+      rowHeight: 200,
+      cols: 1,
+    };
+  }
 
   generateDOM() {
-    return _.map(_.range(this.props.items), i => {
+    return this.props.widgets.map(({ plugin, name, state }, i) => {
+      const Component = plugins[plugin].widgets[name];
+      console.log({ i })
+
       return (
         <div key={i}>
-          <span>{i}</span>
+          <span>
+            <Component key={name} {...state} />;
+          </span>
         </div>
       );
     });
@@ -30,9 +37,7 @@ class BasicLayout extends React.PureComponent {
       { i: 'd', x: 0, y: 3, w: 1, h: 1 },
     ];
     return (
-      <ReactGridLayout layout={layout} {...this.props}>
-        {this.generateDOM()}
-      </ReactGridLayout>
+      <ReactGridLayout {...this.state}>{this.generateDOM()}</ReactGridLayout>
     );
   }
 }
