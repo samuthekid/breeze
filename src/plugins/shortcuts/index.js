@@ -5,10 +5,6 @@ let storage = {
       url: "https://youtube.com/",
     },
     {
-      match: "youtubeeee",
-      url: "https://youtube.com/",
-    },
-    {
       match: "reddit",
       url: "https://reddit.com/",
     },
@@ -19,17 +15,18 @@ let storage = {
   ],
 };
 
-function onTextChange(args) {
-  const x = storage.shortcuts.map((short) => {
-    if (short.match === args)
-      return short.url;
-    else if (short.match.includes(args))
-      return short.match;
-    else
-      return null;
-  });
-  console.log(x)
-  return x;
+function getSuggestions(args) {
+  return storage.shortcuts.map((shortcut, index) => {
+    if (shortcut.match.includes(args)) {
+      return {
+        id: index,
+        onEnter: () => window.location.replace(shortcut.url),
+        text: shortcut.match,
+      }
+    }
+
+    return null;
+  }).filter((suggestion) => suggestion != null);
 }
 
 export const shortcuts = {
@@ -38,11 +35,7 @@ export const shortcuts = {
     {
       condition: 'beTrue',
       label: 'shortcuts',
-      handler: args => [{
-        id: 0,
-        onEnter: () => window.location.replace(storage),
-        text: onTextChange(args),
-      }],
+      handler: getSuggestions,
     },
   ],
 };

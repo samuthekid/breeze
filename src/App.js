@@ -47,7 +47,7 @@ class App extends Component {
           height="10rem"
           selectable={true}
           data={this.props.suggestions}
-          renderItem={({ index, item, isSelected }) => (
+          renderItem={({ index, item, isSelected }) => ( 
               <p className={isSelected ? 'selected' : undefined}>{item.text}</p>
             )}
           onItemClick={({ onEnter }) => onEnter != null && onEnter()}
@@ -66,7 +66,7 @@ const enhance = compose(
       setCmd(value);
 
       const suggestions = Object.values(plugins).reduce((acc, plugin) => {
-        const v = acc.concat( 
+        const v = acc.concat(
           plugin.cmds.map(cmd => {
             const checker = cfg[cmd.condition];
 
