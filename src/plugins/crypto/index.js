@@ -57,7 +57,7 @@ export const crypto = {
               state: { whitelist: ['ETH', 'BTC', 'LTC'] },
             }),
           text: 'crypto widget open',
-          help: 'Open crypto widget',
+          help: 'Open Crypto widget',
         },
       ],
     },
