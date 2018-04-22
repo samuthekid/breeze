@@ -20,15 +20,14 @@ function getSuggestions(args) {
     .map((shortcut, index) => {
       if (shortcut.match.includes(args)) {
         return {
-          id: index,
+          id: 'short_' + index,
           onEnter: () => window.location.replace(shortcut.url),
           text: shortcut.match,
+          help: 'Open ' + shortcut.url,
         };
       }
-
-      return null;
-    })
-    .filter(suggestion => suggestion != null);
+    else return null;
+    }).filter(suggestion => suggestion != null);
 }
 
 export const shortcuts = {

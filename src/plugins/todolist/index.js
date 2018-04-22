@@ -9,9 +9,9 @@ let storage = {
 };
 
 function addListItem(value) {
-  storage.list.push(
+  storage.list = [ ...storage.list,
     { id: storage.list.length + 1, text: value.substring(value.indexOf(' '), value.length), done: false }
-  );
+  ];
 };
 
 function toggleItem(value) {
@@ -28,20 +28,20 @@ function removeItem(value) {
   const id = parseInt(value.split(' ')[1]);
   storage.list = storage.list.filter(item => {
     return item.id != id;
-  });
+  }).map((item, i) => ({ ...item, id: i + 1 }));
 };
 
 function removeDone(value) {
   const id = parseInt(value.split(' ')[1]);
   storage.list = storage.list.filter(item => {
     return !item.done;
-  });
+  }).map((item, i) => ({ ...item, id: i + 1 }));
 };
 
 const Widget = ({ list }) => {
   return <div style={{ height: '100px' }}>
     {list.map(todo => (
-      <p>{todo.id} - {todo.text} {todo.done ? 'X' : '_' }</p>
+      <p key={todo.id}>{todo.id} - {todo.text} {todo.done ? 'X' : '_' }</p>
     ))}
   </div>;
 };
@@ -63,7 +63,8 @@ export const todolist = {
               name: 'main',
               state: storage,
             }),
-          text: 'Add todo list widget',
+          text: 'todo widget open',
+          help: 'Show todo list widget',
         },
       ],
     },
@@ -80,7 +81,8 @@ export const todolist = {
               state: storage,
             })
           },
-          text: 'Add todo item',
+          text: 'todo add <item text>',
+          help: 'Add todo item',
         },
       ],
     },
@@ -97,7 +99,8 @@ export const todolist = {
               state: storage,
             })
           },
-          text: 'Toggle todo item with id',
+          text: 'todo x <id>',
+          help: 'Check/Uncheck todo item [id]',
         },
       ],
     },
@@ -114,7 +117,8 @@ export const todolist = {
               state: storage,
             })
           },
-          text: 'Remove item with id',
+          text: 'todo remove <id>',
+          help: 'Remove item with id',
         },
       ],
     },
@@ -132,6 +136,7 @@ export const todolist = {
             })
           },
           text: 'Remove all checked items',
+          help: 'Remove all checked items',
         },
       ],
     },

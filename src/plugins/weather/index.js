@@ -1,5 +1,4 @@
 import React from 'react';
-import { GenericWeather } from 'react-weather';
 import moment from 'moment';
 
 
@@ -73,6 +72,7 @@ export const weather = {
               state: { city: 'Coimbra' },
             }),
           text: 'weather widget open',
+          help: 'Show weather widget',
         },
       ],
     },
@@ -89,6 +89,7 @@ export const weather = {
               state: { city: args.split(' ')[2] },
             }),
           text: 'weather city <city>',
+          help: 'Set weather city',
         },
       ],
     },
