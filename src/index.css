@@ -1,22 +1,30 @@
-
+/*FONTS*/
 @font-face {
-  font-family: SegoeUILight;
-  src: url('fonts/segoeuil.ttf');
-  src: url('fonts/segoeuil.woff');
+  font-family: G;
+  src: url('fonts/GRegular.ttf');
 }
 
 @font-face {
-  font-family: SegoeUI;
-  src: url('fonts/segoeui.ttf');
-  src: url('fonts/segoeui.woff');
+  font-family: FDLight;
+  src: url('fonts/FDLight.ttf');
 }
 
 @font-face {
-  font-family: SegoeUIBold;
-  src: url('fonts/segoeuib.ttf');
-  src: url('fonts/segoeuib.woff');
+  font-family: RobotoThin;
+  src: url('fonts/RobotoThin.ttf');
+}
+/*BASE*/
+h1 {
+
 }
 
+h2 {
+
+}
+
+p {
+
+}
 ::-webkit-scrollbar {
   width: 2px;
 }
@@ -34,7 +42,7 @@
 }
 
 body{
-  font-family: SegoeUILight;
+  font-family: G;
   font-size: 1.6vh;
   font-weight: 100;
   color: #FFF;
@@ -50,7 +58,7 @@ input:focus{
 }
 
 .wallpaper {
-  background: url('wallpapers/wallpaper.jpg');
+  background: url('wallpapers/wallpaper.png');
   position: absolute;
   width: 100%;
   height: 100vh;
@@ -104,7 +112,7 @@ input:focus{
 }
 
 .clock{
-  font-family: SegoeUI;
+  font-family: RobotoThin;
   font-size: 13.5vh;
   line-height: 15vh;
 }
@@ -132,7 +140,6 @@ input:focus{
 
 .search_box{
   width: 100%;
-  font-family: SegoeUILight;
   font-size: 5vh;
   line-height: 7vh;
   text-align: center;

@@ -33,6 +33,7 @@ class App extends Component {
   render() {
     return (
       <Background onClick={this.setFocus}>
+        <div className='logo'></div>
         <Clock />
         <Helper text={'teste OMG'} />
         <input
