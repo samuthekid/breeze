@@ -1,5 +1,4 @@
 import React from 'react';
-import { GenericWeather } from 'react-weather';
 
 const Widget = ({ city }) => {
   return <div style={{ height: '100px' }}>{city}</div>;
