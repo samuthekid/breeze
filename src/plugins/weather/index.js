@@ -72,7 +72,7 @@ export const weather = {
               name: 'main',
               state: { city: 'Coimbra' },
             }),
-          text: 'Add weather widget',
+          text: 'weather widget open',
         },
       ],
     },

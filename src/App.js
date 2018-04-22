@@ -18,7 +18,7 @@ import Clock from './components/Clock';
 const cfg = {
   regex: cmd => value => cmd.regex.test(value),
   beTrue: cmd => value => true,
-  startsWith: cmd => (value, plugin) => value.startsWith(plugin.label)
+  startsWith: cmd => (value, plugin) => value.startsWith(plugin.label),
 };
 
 class App extends Component {
@@ -49,13 +49,10 @@ class App extends Component {
           selectable={true}
           data={this.props.suggestions}
           renderItem={({ index, item, isSelected }) => (
-              <p
-                id={item.id}
-                className={isSelected ? 'selected' : undefined}
-              >
-                {item.text}
-              </p>
-            )}
+            <p id={item.id} className={isSelected ? 'selected' : undefined}>
+              {item.text}
+            </p>
+          )}
           onItemClick={({ onEnter }) => onEnter != null && onEnter()}
         />
 
@@ -85,26 +82,38 @@ const enhance = compose(
     setCmd: ({ target: { value } }) => {
       setCmd(value);
 
-      const suggestions = Object.values(plugins).reduce((acc, plugin) => {
-        const v = acc.concat(
-          plugin.cmds
-            .map(cmd => {
-              const checker = cfg[cmd.condition];
+      const suggestions = value.length
+        ? Object.values(plugins).reduce((acc, plugin) => {
+            const v = acc.concat(
+              plugin.cmds
+                .map(cmd => {
+                  const checker = cfg[cmd.condition];
 
-              if (checker(cmd)(value, plugin))
-                try {
-                  return cmd.handler(value, { addWidget, mutateWidgetState });
-                } catch (e) {
-                  console.warn(e);
-                  // do nothing
-                }
-              else return null;
-            })
-            .filter(ele => !!ele),
-        );
-        return v;
-      }, []);
-      setSuggestions(flatten(suggestions));
+                  if (checker(cmd)(value, plugin))
+                    try {
+                      return cmd.handler(value, {
+                        addWidget,
+                        mutateWidgetState,
+                      });
+                    } catch (e) {
+                      console.warn(e);
+                      // do nothing
+                    }
+                  else return null;
+                })
+                .filter(ele => !!ele),
+            );
+            return v;
+          }, [])
+        : [];
+
+      const flattenSuggestions = !suggestions.length
+        ? []
+        : flatten(suggestions).sort(
+            (a, b) => (a.text.indexOf(value) > b.text.indexOf(value) ? -1 : 1),
+          );
+
+      setSuggestions(flattenSuggestions);
     },
   })),
 );
