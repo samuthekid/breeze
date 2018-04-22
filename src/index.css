@@ -1,3 +1,9 @@
+/*WRAPPERS*/
+.flex_vam_sb {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 /*FONTS*/
 @font-face {
   font-family: G;
@@ -207,33 +213,37 @@ p.selected{
 
 .logo{
   position: fixed;
-  top: 2vh;
-  left: 2vh;
-  width: 4vh;
-  height: auto;
-  cursor: pointer;
-  opacity: 0.5;
-  transition: opacity 0.4s;
+  top: 2.4rem;
+  left: 2.4rem;
+  width: 5.3rem;
+  height: 3.5rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 1;
+  background-image: url('img/logo.svg');
 }
 
-.logo:hover{
+.help_wrapper {
+  position: fixed;
+  bottom: 2.4rem;
+  left: 2.4rem;
+  width: calc(100% - 4.8rem);
+}
+
+.help_icon {
+  width: 3rem;
+  height: 3rem;
+  background-image: url('img/help.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: .2s ease-in-out;
+}
+
+.help:hover {
   opacity: 1;
 }
-
-.help{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc(30% - 6vh);
-  min-width: 300px;
-  height: 89vh;
-  padding: 3vh;
-  padding-top: 8vh;
-  background: rgba(0, 0, 0, 0.65);
-  display: none;
-  overflow-y: auto;
-}
-
 .help_title{
   font-weight: 600;
   margin: 12px 0;
