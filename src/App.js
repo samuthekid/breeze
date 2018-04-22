@@ -49,7 +49,12 @@ class App extends Component {
           selectable={true}
           data={this.props.suggestions}
           renderItem={({ index, item, isSelected }) => (
-              <p className={isSelected ? 'selected' : undefined}>{item.text}</p>
+              <p
+                id={item.id}
+                className={isSelected ? 'selected' : undefined}
+              >
+                {item.text}
+              </p>
             )}
           onItemClick={({ onEnter }) => onEnter != null && onEnter()}
         />
