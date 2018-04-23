@@ -55,7 +55,12 @@ class App extends Component {
               {item.text}
             </p>
           )}
-          onItemClick={({ onEnter }) => onEnter != null && onEnter()}
+          onItemClick={({ onEnter }) => {
+            this.props.setCmmd('')
+            this.props.setSuggestions([])
+            this.setFocus()
+            onEnter != null && onEnter()
+          }}
         />
 
         {!this.props.suggestions.length &&
@@ -64,7 +69,7 @@ class App extends Component {
 
         <div className="help_wrapper flex_vam_sb">
           <div className="help_icon" />
-          <div>download this wallpaper</div>
+
         </div>
       </Background>
     );
@@ -72,7 +77,7 @@ class App extends Component {
 }
 
 const enhance = compose(
-  withState('cmd', 'setCmd', ''),
+  withState('cmd', 'setCmmd', ''),
   withState('suggestions', 'setSuggestions', []),
   withState('widgets', 'setWidgets', []),
   withState('shortcuts', 'setShortcuts', []),
@@ -104,11 +109,11 @@ const enhance = compose(
     },
   })),
   withProps((props) => {
-    const { setCmd, setSuggestions, addWidget, mutateWidgetState, addShortcut, removeShortcut } = props;
+    const { setCmmd, setSuggestions, addWidget, mutateWidgetState, addShortcut, removeShortcut } = props;
 
     return ({
       setCmd: ({ target: { value } }) => {
-        setCmd(value);
+        setCmmd(value);
 
         const suggestions = value.length
           ? flatten(

@@ -27,15 +27,21 @@ class Widget extends React.Component {
 
     if (data == null) return null;
 
-    return whitelist
-      .map(symbol => data.find(ele => ele.symbol === symbol))
-      .filter(ele => !!ele)
-      .map(({ id, price, symbol }) => (
-        <div key={id} style={{ display: 'flex', justify: 'space-around' }}>
-          <p>{symbol}</p>
-          <p>{price} $</p>
-        </div>
-      ));
+    return (
+      <div className='crypto_wrapper'>
+      {
+      whitelist
+        .map(symbol => data.find(ele => ele.symbol === symbol))
+        .filter(ele => !!ele)
+        .map(({ id, price, symbol }) => (
+          <div key={id} style={{ display: 'flex', justify: 'space-around' }}>
+            <p>{symbol}</p>
+            <p>{price} $</p>
+          </div>
+        ))
+      }
+      </div>
+    );
   }
 }
 
