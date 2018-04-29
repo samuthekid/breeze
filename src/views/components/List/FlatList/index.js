@@ -22,7 +22,9 @@ const renderFlatList = ({
           </div>
         );
       })
-    : placeholder != null ? placeholder : null;
+    : placeholder != null
+      ? placeholder
+      : null;
 
 renderFlatList.propTypes = {
   filteredData: PropTypes.arrayOf(

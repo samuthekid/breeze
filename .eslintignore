@@ -1,0 +1,6 @@
+src/registerServiceWorker.js
+src/setupTests.js
+src/*.svg
+src/*.css
+src/*.scss
+

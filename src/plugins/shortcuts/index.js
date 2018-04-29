@@ -1,22 +1,17 @@
-import React from 'react';
-
-function getSuggestions(args, _, props) {
-  return props.shortcuts
-    .filter((plug) => plug.plugin === 'shortcuts')
-    .map((shortcut, index) => {
-      const short = shortcut.state;
-
-      if (short.match.includes(args)) {
+function getSuggestions(args, _, state = initialState) {
+  return (state.list || [])
+    .map(({ match, url }, index) => {
+      if (match.includes(args)) {
         return {
-          id: 'short_' + index,
-          text: short.match,
-          help: 'Open ' + short.url,
-          onEnter: () => window.location.replace(short.url),
-        }
+          id: `short_${index}`,
+          text: match,
+          help: `Open ${url}`,
+          onEnter: () => window.location.replace(url),
+        };
       }
-
       return null;
-  }).filter((suggestion) => suggestion != null);
+    })
+    .filter(ele => !!ele);
 }
 
 function getName(args) {
@@ -24,57 +19,61 @@ function getName(args) {
 }
 
 function getUrl(args) {
-  let url = args.split(' ')[3];
+  const url = args.split(' ')[3];
 
   if (!url.includes('http://')) {
-    return 'http://' + url;
+    return `http://${url}`;
   }
 
   return url;
 }
 
+const initialState = {
+  list: [
+    { match: 'fb', url: 'https://facebook.com' },
+    { match: 'gmail', url: 'https://gmail.com' },
+  ],
+};
+
 export const shortcuts = {
   label: 'shortcuts',
   cmds: [
     {
-      condition: 'beTrue',
       handler: getSuggestions,
     },
     {
-      condition: 'startsWith',
       label: 'add',
-      handler: (args, { addShortcut, mutateWidgetState }, _) => ({
+      handler: (args, { setPluginState }) => ({
         id: 'short_add',
         text: 'shortcuts add <name> <url>',
         help: 'Add shortcut <name> <url>',
         onEnter: () =>
-          addShortcut(shortcuts => {
-            console.log('ADD SHORTCUT');
-            return {
-              plugin: 'shortcuts',
-              state: {
+          setPluginState((state = initialState) => ({
+            ...state,
+            list: [
+              ...state.list,
+              {
                 match: getName(args),
                 url: getUrl(args),
-              }
-            }
-          })
-        }),
+              },
+            ],
+          })),
+      }),
     },
     {
-      condition: 'startsWith',
       label: 'remove',
-      handler: (args, { removeShortcut, mutateWidgetState}, _) => ({
+      handler: (args, { setPluginState }) => ({
         id: 'short_rm',
         text: 'shortcuts remove <name>',
         help: 'Remove shortcut <name>',
         onEnter: () =>
-          removeShortcut(shortcuts => {
-            console.log('REMOVE SHORTCUT');
-            return (shortcuts.filter((short) =>
-              short.state.match != args.split(' ')[2]
-            ));
-          })
+          setPluginState((state = initialState) => ({
+            ...state,
+            list: state.list.filter(
+              short => short.match !== args.split(' ')[2],
+            ),
+          })),
       }),
-    }
+    },
   ],
 };

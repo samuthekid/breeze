@@ -1,0 +1,118 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { compose, withState, withProps } from 'recompose';
+import styled from 'styled-components';
+import {
+  loadInitialState,
+  saveState,
+  setPluginState,
+  setWidgetState,
+  getSuggestions,
+} from 'core';
+
+import 'views/index.css';
+import Layout from 'views/components/Layout';
+import FlatList from 'views/components/List';
+import Background from 'views/components/Background';
+import Helper from 'views/components/Helper';
+import Logo from 'views/components/Logo';
+import SearchBox from 'views/components/SearchBox';
+import * as plugins from '../../../plugins';
+
+class App extends Component {
+  static propTypes = {
+    loadInitialState: PropTypes.func.isRequired,
+    setCmd: PropTypes.func.isRequired,
+    cmd: PropTypes.string.isRequired,
+    refreshSuggestions: PropTypes.func.isRequired,
+    suggestions: PropTypes.arrayOf(PropTypes.shape({})),
+    widgets: PropTypes.arrayOf(PropTypes.shape({})),
+    setSuggestions: PropTypes.func.isRequired,
+  };
+
+  componentDidMount() {
+    this.setFocus();
+    this.props.loadInitialState();
+  }
+
+  setFocus = () => this.cmdInput.focus();
+
+  render() {
+    return (
+      <Background onClick={this.setFocus}>
+        <Logo />
+        <SearchBox
+          value={this.props.cmd}
+          onChange={this.props.refreshSuggestions}
+          innerRef={input => {
+            this.cmdInput = input;
+          }}
+        />
+        <FlatList
+          onShiftItemClick={() =>
+            window.location.replace(
+              `https://www.google.pt/search?q=${escape(this.props.cmd)}`,
+            )
+          }
+          header={item => <Helper text={item.help} />}
+          selectable
+          data={this.props.suggestions}
+          renderItem={({ index, item, isSelected }) => (
+            <p id={item.id} className={isSelected ? 'selected' : undefined}>
+              {item.text}
+            </p>
+          )}
+          onItemClick={({ onEnter }) => {
+            this.props.setCmd('');
+            this.props.setSuggestions([]);
+            this.setFocus();
+            onEnter != null && onEnter();
+          }}
+        />
+
+        <Layout
+          widgets={this.props.widgets}
+          hidden={!!this.props.suggestions.length}
+        />
+      </Background>
+    );
+  }
+}
+
+const enhance = compose(
+  withState('cmd', 'setCmd', ''),
+  withState('suggestions', 'setSuggestions', []),
+  withState('widgets', 'setWidgets', []),
+  withState('plugins', 'setPlugins', {}),
+  withProps(({ setWidgets, setPlugins, widgets, plugins: pluginsState }) => ({
+    loadInitialState: () => loadInitialState({ setWidgets, setPlugins }),
+    save: (data) => saveState({ widgets, plugins: pluginsState, ...data }),
+  })),
+  withProps(
+    ({ setWidgets, setPlugins, widgets, save, plugins: pluginsState }) => ({
+      setWidgetState: setWidgetState({ setWidgets, widgets, save }),
+      setPluginState: setPluginState({
+        save,
+        setPlugins,
+        plugins: pluginsState,
+      }),
+    }),
+  ),
+  withProps(props => ({
+    refreshSuggestions: ({ target: { value } }) => {
+      props.setCmd(value);
+
+      props.setSuggestions(
+        getSuggestions({
+          value,
+          plugins,
+          pluginsState: props.plugins,
+          mutateWidget: props.setWidgetState,
+          mutatePlugin: props.setPluginState,
+        }),
+      );
+    },
+  })),
+);
+
+export default enhance(App);
