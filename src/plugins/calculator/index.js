@@ -2,9 +2,9 @@ function getSuggestions(args) {
   return [
     {
       id: 0,
-      text: '= ' + eval(args),
+      text: `= ${eval(args)}`,
       help: 'inline calculator <3',
-    }
+    },
   ];
 }
 

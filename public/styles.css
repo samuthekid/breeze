@@ -1,3 +1,16 @@
+body {
+  font-family: G;
+  font-size: 1.6vh;
+  font-weight: 100;
+  color: #FFF;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  text-shadow: 0px 0px 18px #222;
+}
+
+
 .react-grid-layout {
   position: relative;
   transition: height 200ms ease;

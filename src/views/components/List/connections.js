@@ -71,8 +71,13 @@ const enhance = compose(
         case 13:
           e.preventDefault();
           if (!props.sections)
-            props.onItemClick(props.filteredData[props.selectedItem]);
-          else props.onItemClick(currentSection[props.selectedItem]);
+            !e.shiftKey
+              ? props.onItemClick(props.filteredData[props.selectedItem])
+              : props.onShiftItemClick(props.filteredData[props.selectedItem]);
+          else
+            !e.shiftKey
+              ? props.onItemClick(currentSection[props.selectedItem])
+              : props.onShiftItemClick(currentSection[props.selectedItem]);
           break;
         default:
           break;

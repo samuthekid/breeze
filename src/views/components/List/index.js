@@ -111,7 +111,7 @@ export class List extends React.Component {
       height,
       filteredData,
       footer,
-      header
+      header,
     } = this.props;
 
     const withData =

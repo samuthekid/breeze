@@ -1,4 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const CryptoWrapper = styled.div`
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+`;
 
 const API = 'https://api.coinmarketcap.com/v1/ticker/';
 
@@ -13,6 +19,8 @@ class Widget extends React.Component {
       .then(res => res.json())
       .then(results =>
         results.map(ele => ({
+          change1h: ele.percent_change_1h,
+          change24h: ele.percent_change_24h,
           id: ele.id,
           symbol: ele.symbol,
           price: ele.price_usd,
@@ -28,19 +36,51 @@ class Widget extends React.Component {
     if (data == null) return null;
 
     return (
-      <div className='crypto_wrapper'>
-      {
-      whitelist
-        .map(symbol => data.find(ele => ele.symbol === symbol))
-        .filter(ele => !!ele)
-        .map(({ id, price, symbol }) => (
-          <div key={id} style={{ display: 'flex', justify: 'space-around' }}>
-            <p>{symbol}</p>
-            <p>{price} $</p>
-          </div>
-        ))
-      }
-      </div>
+      <CryptoWrapper>
+        {whitelist
+          .map(symbol => data.find(ele => ele.symbol === symbol))
+          .filter(ele => !!ele)
+          .map(({ id, price, symbol, change24h }, i) => (
+            <div
+              key={id}
+              style={{
+                marginTop: i === 0 ? '0px' : '16px',
+                width: '250px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                align: 'center',
+              }}
+            >
+              <div>
+                <p>{symbol}</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div>
+                  <p
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      padding: '0px',
+                      margin: '0px',
+                    }}
+                  >
+                    {price} $
+                  </p>
+                  <p
+                    style={{
+                      textAlign: 'center',
+                      margin: '0px',
+                      padding: '4px',
+                      fontSize: '12px',
+                    }}
+                  >
+                    {change24h}% 24h
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+      </CryptoWrapper>
     );
   }
 }
@@ -52,12 +92,11 @@ export const crypto = {
   },
   cmds: [
     {
-      condition: 'startsWith',
-      handler: (args, { addWidget }) => [
+      handler: (args, { setWidgetState }) => [
         {
           id: 'crypto_0',
           onEnter: () =>
-            addWidget({
+            setWidgetState({
               plugin: 'crypto',
               name: 'main',
               state: { whitelist: ['ETH', 'BTC', 'LTC'] },
@@ -68,12 +107,11 @@ export const crypto = {
       ],
     },
     {
-      condition: 'startsWith',
-      handler: (args, { mutateWidgetState }) => [
+      handler: (args, { setWidgetState }) => [
         {
           id: 'crypto_1',
           onEnter: () => {
-            mutateWidgetState(widgets => {
+            setWidgetState(widgets => {
               const element = widgets.find(
                 ele => ele.plugin === 'crypto' && ele.name === 'main',
               );
@@ -93,17 +131,18 @@ export const crypto = {
       ],
     },
     {
-      condition: 'startsWith',
-      handler: (args, { mutateWidgetState }) => [
+      handler: (args, { setWidgetState }) => [
         {
           id: 'crypto_2',
           onEnter: () => {
-            mutateWidgetState(widgets => {
+            setWidgetState(widgets => {
               const element = widgets.find(
                 ele => ele.plugin === 'crypto' && ele.name === 'main',
               );
 
-              const whitelist = element.state.whitelist.filter(ele => ele !== args.split(' ')[3])
+              const whitelist = element.state.whitelist.filter(
+                ele => ele !== args.split(' ')[3],
+              );
               return {
                 plugin: 'crypto',
                 name: 'main',
@@ -118,6 +157,5 @@ export const crypto = {
         },
       ],
     },
-
   ],
 };
