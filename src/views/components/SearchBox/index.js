@@ -11,6 +11,9 @@ const SearchBox = styled.input`
   text-shadow: 0px 0px 10px #000;
   border-style: none;
   background-color: transparent;
+  :focus {
+    outline: 0;
+  }
 `;
 
 export default SearchBox;

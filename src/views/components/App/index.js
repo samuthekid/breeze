@@ -1,23 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose, withState, withProps } from 'recompose';
-import styled from 'styled-components';
-import {
-  loadInitialState,
-  saveState,
-  setPluginState,
-  setWidgetState,
-  getSuggestions,
-} from 'core';
-
-import 'views/index.css';
 import Layout from 'views/components/Layout';
 import FlatList from 'views/components/List';
 import Background from 'views/components/Background';
 import Helper from 'views/components/Helper';
 import Logo from 'views/components/Logo';
 import SearchBox from 'views/components/SearchBox';
-import * as plugins from '../../../plugins';
+import enhance from './enhance';
 
 class App extends Component {
   static propTypes = {
@@ -78,41 +67,5 @@ class App extends Component {
     );
   }
 }
-
-const enhance = compose(
-  withState('cmd', 'setCmd', ''),
-  withState('suggestions', 'setSuggestions', []),
-  withState('widgets', 'setWidgets', []),
-  withState('plugins', 'setPlugins', {}),
-  withProps(({ setWidgets, setPlugins, widgets, plugins: pluginsState }) => ({
-    loadInitialState: () => loadInitialState({ setWidgets, setPlugins }),
-    save: (data) => saveState({ widgets, plugins: pluginsState, ...data }),
-  })),
-  withProps(
-    ({ setWidgets, setPlugins, widgets, save, plugins: pluginsState }) => ({
-      setWidgetState: setWidgetState({ setWidgets, widgets, save }),
-      setPluginState: setPluginState({
-        save,
-        setPlugins,
-        plugins: pluginsState,
-      }),
-    }),
-  ),
-  withProps(props => ({
-    refreshSuggestions: ({ target: { value } }) => {
-      props.setCmd(value);
-
-      props.setSuggestions(
-        getSuggestions({
-          value,
-          plugins,
-          pluginsState: props.plugins,
-          mutateWidget: props.setWidgetState,
-          mutatePlugin: props.setPluginState,
-        }),
-      );
-    },
-  })),
-);
 
 export default enhance(App);
