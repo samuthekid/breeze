@@ -1,0 +1,61 @@
+/*FONTS*/
+@font-face {
+  font-family: G;
+  src: url('./fonts/GRegular.ttf');
+}
+
+@font-face {
+  font-family: FDLight;
+  src: url('./fonts/FDLight.ttf');
+}
+
+@font-face {
+  font-family: RobotoThin;
+  src: url('./fonts/RobotoThin.ttf');
+}
+/*BASE*/
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-button {
+  background: transparent;
+}
+
+::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFF;
+}
+
+body{
+  font-family: G;
+  font-size: 1.6vh;
+  font-weight: 100;
+  color: #FFF;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  text-shadow: 0px 0px 18px #222;
+}
+
+input:focus{
+  outline: 0;
+}
+
+p{
+  width: fit-content;
+  margin: 0 auto 1.4vh auto;
+  padding-bottom: 1vh;
+  font-size: 2.6vh;
+  cursor: pointer;
+}
+
+p.selected{
+  border-bottom: solid 1px #FFF;
+  padding-bottom: calc(1vh - 1px);
+}

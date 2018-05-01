@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import Layout from 'views/components/Layout';
 import FlatList from 'views/components/List';
 import Background from 'views/components/Background';
