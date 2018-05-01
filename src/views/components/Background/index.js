@@ -1,15 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
-import src from 'views/img/wallpaper.png';
-
-const Wallpaper = styled.div`
-  background: url(${src});
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-`;
 
 const MainContent = styled.div`
+  background: url(https://www.bing.com//az/hprichbg/rb/GreatGhost_EN-US8900139658_1920x1080.jpg);
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -18,19 +10,9 @@ const MainContent = styled.div`
   align-content: center;
   position: absolute;
   width: 100%;
-  padding-top: 20vh;
-  height: 80vh;
-  max-height: 80vh;
+  height: 100vh;
   text-align: center;
   z-index: 100;
 `;
 
-const Background = ({ onClick, children }) => (
-  <div>
-    <Wallpaper />
-
-    <MainContent onClick={onClick}>{children}</MainContent>
-  </div>
-);
-
-export default Background;
+export default MainContent;

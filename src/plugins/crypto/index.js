@@ -1,16 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const CryptoWrapper = styled.div`
   background-color: rgba(255, 255, 255, 0.1);
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const API = 'https://api.coinmarketcap.com/v1/ticker/';
 
 class Widget extends React.Component {
+  static propTypes = {
+    whitelist: PropTypes.arrayOf(PropTypes.string),
+  };
+
   state = {
-    loading: false,
     data: null,
   };
 

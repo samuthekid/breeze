@@ -8,7 +8,7 @@ function getSuggestions(args) {
   ];
 }
 
-export const calculator = {
+const calculator = {
   label: 'calculator',
   cmds: [
     {
@@ -18,4 +18,8 @@ export const calculator = {
       handler: getSuggestions,
     },
   ],
+};
+
+module.exports = {
+  calculator,
 };

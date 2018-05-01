@@ -1,4 +1,4 @@
-import React from 'react';
+import Widget from './todo';
 
 const storage = {
   list: [
@@ -42,16 +42,6 @@ function removeDone(value) {
     .filter(item => !item.done)
     .map((item, i) => ({ ...item, id: i + 1 }));
 }
-
-const Widget = ({ list }) => (
-  <div style={{ height: '100%' }}>
-    {list.map(todo => (
-      <p key={todo.id}>
-        {todo.id} - {todo.text} {todo.done ? 'X' : '_'}
-      </p>
-    ))}
-  </div>
-);
 
 export const todolist = {
   label: 'todo',

@@ -1,6 +1,4 @@
-import React from 'react';
 import styled from 'styled-components';
-import logoSrc from 'views/img/logo.svg';
 
 const SearchBox = styled.input`
   width: 100%;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const WeatherWrapper = styled.div`
@@ -23,8 +24,11 @@ const API = city =>
   `https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="${city}")&format=json`;
 
 class Widget extends React.Component {
+  static propTypes = {
+    city: PropTypes.string.isRequired,
+  };
+
   state = {
-    loading: false,
     data: null,
   };
 

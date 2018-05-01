@@ -12,7 +12,7 @@ export const setWidgetState = ({
   const data = [...w, changes];
 
   setWidgets(data);
-  save({ widgets: data});
+  save({ widgets: data });
 };
 
 export const setPluginState = ({
@@ -23,7 +23,12 @@ export const setPluginState = ({
   const element =
     typeof mutation === 'object' ? mutation : mutation(plugins[plugin.key]);
 
-  const data = { ...plugins, [plugin.label]: element };
+  const data = { ...plugins, [plugin.label]: element };
   setPlugins(data);
-  save({ plugins: data});
+  save({ plugins: data });
+};
+
+export const setLayoutState = ({ setLayout, save, layouts }) => layout => {
+  setLayout(layout);
+  save({ layout });
 };

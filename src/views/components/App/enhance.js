@@ -4,6 +4,7 @@ import {
   saveState,
   setPluginState,
   setWidgetState,
+  setLayoutState,
   getSuggestions,
 } from 'core';
 import * as plugins from '../../../plugins';
@@ -13,17 +14,40 @@ const enhance = compose(
   withState('suggestions', 'setSuggestions', []),
   withState('widgets', 'setWidgets', []),
   withState('plugins', 'setPlugins', {}),
-  withProps(({ setWidgets, setPlugins, widgets, plugins: pluginsState }) => ({
-    loadInitialState: () => loadInitialState({ setWidgets, setPlugins }),
-    save: data => saveState({ widgets, plugins: pluginsState, ...data }),
-  })),
+  withState('layout', 'setLayout', { lg: [], md: [], sm: [], xs: [] }),
   withProps(
-    ({ setWidgets, setPlugins, widgets, save, plugins: pluginsState }) => ({
+    ({
+      setWidgets,
+      setPlugins,
+      widgets,
+      plugins: pluginsState,
+      setLayout,
+      layout,
+    }) => ({
+      loadInitialState: () =>
+        loadInitialState({ setWidgets, setPlugins, setLayout }),
+      save: data =>
+        saveState({ widgets, plugins: pluginsState, layout, ...data }),
+    }),
+  ),
+  withProps(
+    ({
+      setLayout,
+      setWidgets,
+      setPlugins,
+      widgets,
+      save,
+      plugins: pluginsState,
+    }) => ({
       setWidgetState: setWidgetState({ setWidgets, widgets, save }),
       setPluginState: setPluginState({
         save,
         setPlugins,
         plugins: pluginsState,
+      }),
+      setLayoutState: setLayoutState({
+        save,
+        setLayout,
       }),
     }),
   ),
