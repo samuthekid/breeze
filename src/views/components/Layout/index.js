@@ -25,7 +25,7 @@ const layoutOpts = {
   resizable: true,
   preventCollision: true,
   style: { height: '100vh', width: '100%' },
-  compactType: 'none',
+  compactType: null,
 };
 
 const BasicLayout = props => (
@@ -58,7 +58,7 @@ BasicLayout.propTypes = {
   widgets: PropTypes.arrayOf(PropTypes.shape({})),
   hidden: PropTypes.bool.isRequired,
   onLayoutChange: PropTypes.func.isRequired,
-  layout: PropTypes.arrayOf(PropTypes.shape({})),
+  layout: PropTypes.shape({}),
 };
 
 export default BasicLayout;

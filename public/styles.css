@@ -8,6 +8,10 @@ body {
   width: 100% !important;
   height: 100vh !important;
   text-shadow: 0px 0px 18px #222;
+  max-width: 100%;
+  max-height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 

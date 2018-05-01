@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import src from 'views/img/wallpaper.png';
 
 const MainContent = styled.div`
-  background: url(https://www.bing.com//az/hprichbg/rb/GreatGhost_EN-US8900139658_1920x1080.jpg);
+  background: url(${src});
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;

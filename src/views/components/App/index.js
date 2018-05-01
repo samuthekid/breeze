@@ -20,7 +20,7 @@ class App extends Component {
     loadInitialState: PropTypes.func.isRequired,
     setCmd: PropTypes.func.isRequired,
     setLayoutState: PropTypes.func.isRequired,
-    layout: PropTypes.arrayOf(PropTypes.shape({})),
+    layout: PropTypes.shape({}),
     cmd: PropTypes.string.isRequired,
     refreshSuggestions: PropTypes.func.isRequired,
     suggestions: PropTypes.arrayOf(PropTypes.shape({})),

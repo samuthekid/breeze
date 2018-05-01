@@ -8,8 +8,6 @@ import gRegular from 'views/fonts/GRegular.ttf';
 import fdLight from 'views/fonts/FDLight.ttf';
 import robotoThin from 'views/fonts/RobotoThin.ttf';
 
-console.log(window.calculator);
-
 injectGlobal`
   @font-face {
     font-family: G;
