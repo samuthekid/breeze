@@ -24,6 +24,7 @@ const layoutOpts = {
   rowHeight: ROW_HEIGHT,
   resizable: true,
   preventCollision: true,
+  cols: {lg: 80,sm: 70},
   style: { height: '100vh', width: '100%' },
   compactType: null,
 };

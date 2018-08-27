@@ -18,7 +18,6 @@ const AmPm = styled.span`
 
 class Clock extends Component {
   state = {
-    showSeconds: true,
     useAmPm: false,
     time: '',
     ampm: '',
@@ -32,7 +31,6 @@ class Clock extends Component {
     const time = new Date();
     let h = parseInt(time.getHours(), 10);
     let m = parseInt(time.getMinutes(), 10);
-    let s = parseInt(time.getSeconds(), 10);
 
     let amPm = '';
     if (this.state.useAmPm) {
@@ -43,10 +41,9 @@ class Clock extends Component {
     }
     if (h < 10) h = `0${h}`;
     if (m < 10) m = `0${m}`;
-    if (s < 10) s = `0${s}`;
 
     this.setState({
-      time: this.state.showSeconds ? `${h}:${m}:${s}` : `${h}:${m}`,
+      time: `${h}:${m}`,
       ampm: this.state.useAmPm && amPm,
     });
 

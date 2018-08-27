@@ -9,6 +9,7 @@ const CryptoWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height:100%;
 `;
 
 const API = 'https://api.coinmarketcap.com/v1/ticker/';
@@ -53,7 +54,7 @@ class Widget extends React.Component {
               key={id}
               style={{
                 marginTop: i === 0 ? '0px' : '16px',
-                width: '250px',
+                width: '100%',
                 display: 'flex',
                 justifyContent: 'space-between',
                 align: 'center',

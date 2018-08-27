@@ -53,6 +53,18 @@ class Widget extends React.Component {
     if (data == null) return null;
 
     return (
+      <div
+        dangerouslySetInnerHTML={{
+          __html: `
+          <iframe id="forecast_embed" frameborder="0" height="245" width="100%" src="//forecast.io/embed/#lat=42.3583&lon=-71.0603&name=Downtown Boston"></iframe>
+
+
+`,
+        }}
+      />
+    );
+
+    return (
       <WeatherWrapper style={{ height: '100%' }}>
         <Title>{data.condition.date.substring(0, 3)}</Title>
         <BigTitle>{data.condition.temp}</BigTitle>
